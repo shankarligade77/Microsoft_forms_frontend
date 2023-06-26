@@ -29,7 +29,9 @@ export const Create_Form = gql`
 export const DELETE_FORM = gql`
   mutation deleteForm($id: Float!) {
     deleteForm(id: $id){
-      token
+      id
+      title
+      description
     }
   }
 `;

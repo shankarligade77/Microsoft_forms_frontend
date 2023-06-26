@@ -1,13 +1,14 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { DELETE_FORM } from "../Graphql/Mutation";
+import { GetForms } from "../Graphql/Queries";
 
 const AllForms1 = (props: {
   data: { id: Number; title: any; description: any };
 }) => {
   const { id, title, description } = props.data;
   const navigator = useNavigate();
-
+  const { refetch } = useQuery(GetForms);
   const [deleteForm, { loading, error }] = useMutation(DELETE_FORM);
 
   const removeForm = async () => {
@@ -15,9 +16,11 @@ const AllForms1 = (props: {
     deleteForm({ variables: { id: parseFloat("" + id) } })
       .then(() => {
         console.log(`Form with ID ${id} deleted successfully`);
+        refetch();
       })
       .catch((error) => {
         console.error("Failed to delete form:", error);
+        refetch();
       });
   };
 

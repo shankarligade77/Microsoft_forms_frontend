@@ -5,81 +5,212 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GetForms } from "../Graphql/Queries";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useFormik } from "formik";
+import * as Yup from 'yup'
 const tmp = (
   form: {
     QuestionType: string;
     question: string;
     description?: string;
   },
-  index: number
+  index: number,
+  showPreview: boolean,
+  errors:any,touched:any
 ) => {
-  if (form.QuestionType === "Text") {
+  if (!showPreview) {
+    if (form.QuestionType === "Text") {
+      return (
+        <div>
+          <Field
+            type="text"
+            className="form-control"
+            name={`questions[${index}].question`}
+            placeholder="Question"
+          />
+
+           {errors.questions?.[index]?.question && touched.questions?.[index]?.question ? (
+            <div  style={{ color: "red" }}>{errors.questions[index].question}</div>
+          ) : null}
+        
+          <Field
+            type="text"
+            className="form-control"
+            name={`questions[${index}].description`}
+          
+            placeholder="Description"
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Field
+            type="text"
+            className="form-control"
+            name={`questions[${index}].question`}
+            placeholder="Question"
+          />
+          {errors.questions?.[index]?.question && touched.questions?.[index]?.question ? (
+            <div  style={{ color: "red" }}>{errors.questions[index].question}</div>
+          ) : null}
+        
+          <Field
+            type="date"
+            className="form-control"
+          
+            name={`questions[${index}].date`}
+          />
+        </div>
+      );
+    }
+  } else {
+    if (form.QuestionType === "Text") {
+      return (
+        <div>
+          <Field
+            type="text"
+            className="form-control"
+            name={`questions[${index}].question`}
+            placeholder="Question"
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Field
+            type="text"
+            className="form-control"
+            name={`questions[${index}].question`}
+            placeholder="Question"
+          />
+        </div>
+      );
+    }
+  }
+};
+
+const tmp3 = (showPreview: boolean,errors:any,touched:any) => {
+  if (!showPreview) {
+    return (
+      <>
+        <Field type="text" placeholder="Title" name={`title`} />
+        {errors.title && touched.title ? (
+             <div  style={{ color: "red" }}>{errors.title}</div>
+           ) : null}
+        <Field type="text" placeholder="Description" name={`Description`} />
+      </>
+    );
+  } else {
+    return (
+      <div className="fieldoutline">
+        <Field type="text" placeholder="Title" name={`title`} />
+        <Field type="text" placeholder="Description" name={`Description`} />
+        <hr />
+      </div>
+    );
+  }
+};
+
+const tmp1 = (index: number, showPreview: boolean, array: any, values: any) => {
+  if (!showPreview) {
     return (
       <div>
-        <Field
-          type="text"
-          className="form-control"
-          name={`questions[${index}].question`}
-          placeholder="Question"
-        />
-
-        <Field
-          type="text"
-          className="form-control"
-          name={`questions[${index}].description`}
-          disabled={true}
-          placeholder="Description"
-        />
+        <h3>Question {index + 1}</h3>
+        <button
+          type="button"
+          className="btn btn-danger btn-sm delete "
+          onClick={() => array.remove(index)}
+        >
+          <AiOutlineDelete />
+        </button>
+        <button
+          type="button"
+          className="btn btn-success btn-sm copy "
+          onClick={() => array.insert(index + 1, values.questions[index])}
+        >
+          <AiOutlineCopy />
+        </button>
       </div>
     );
   } else {
     return (
       <div>
-        <Field
-          type="text"
-          className="form-control"
-          name={`questions[${index}].question`}
-          placeholder="Question"
-        />
-        <Field
-          type="date"
-          className="form-control"
-          disabled={true}
-          name={`questions[${index}].date`}
-        />
+        <h6>Question {index + 1}</h6>
       </div>
     );
   }
 };
-const initialValues = {
-  question: "",
-  description: "",
-};
+// const initialValues = {
+//   question: "",
+//   description: "",
+// };
+const initialValues={
+  title: "",
+  Description: "",
+  questions: [],
+}
 const Forms = () => {
+
+ 
+
   const [createForm] = useMutation(Create_Form);
   const [addItems] = useMutation(ADD_ITEMS);
   const { data, loading } = useQuery(GetForms);
-
+  const [expand, setExpand] = useState(false);
+  const [showPreview, setshowPreview] = useState(false);
   const navigate = useNavigate();
+  // const [previewdata, setPreviewdata] = useState([]);
+  // const Preview = () => {
+  //   navigate("/preview");
+  // };
 
-  const Preview = () => {
-    navigate("/preview");
+  const handleToggle = () => {
+    setExpand(!expand);
   };
 
+  const handleToggle1 = () => {
+    setshowPreview(!showPreview);
+  };
+
+  const sidebar = () => {
+    setExpand(false);
+  };
+
+
+
+  // const validationSchema=Yup.object({
+  //   title:Yup.string().required("Required!"),
+  //   question:Yup.string().required("Required")
+ 
+  // })
+  const itemSchema = Yup.object().shape({
+    question: Yup.string().required("Question is required"),
+  });
+  
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Title is required"),
+    Description: Yup.string().required("Description is required"),
+    questions: Yup.array().of(itemSchema),
+  });
+
   return (
-    <div className="outer-container">
+    
+    <div className="card">
       <Formik
-        initialValues={{
-          title: "",
-          Description: "",
-          questions: [],
-        }}
+     
+       
+        initialValues={initialValues}
+        validationSchema={validationSchema}
         onSubmit={async (values) => {
           console.log(values);
-          if (values.title == "") {
-            alert("Enter Title");
-          } else {
+         
+
+          // if (!values.title) {
+          //   alert("Enter Title");
+            
+          // } 
+          // else { 
             const title = values.title;
             const Description = values.Description;
 
@@ -91,7 +222,7 @@ const Forms = () => {
             });
 
             const token = xyz.data.createform.token;
-            // console.log(xyz);
+         
             sessionStorage["token"] = token;
 
             const { data } = await addItems({
@@ -99,11 +230,12 @@ const Forms = () => {
                 input: values.questions,
               },
             });
-            alert("data addedd successfully")
-          }
+            alert("data addedd successfully");
+          // }
         }}
       >
-        {({ values }) => (
+        {({ values ,errors,touched}) => (
+          
           <Form>
             <FieldArray
               name="questions"
@@ -112,82 +244,72 @@ const Forms = () => {
                   <div style={{ float: "right" }}>
                     <button
                       type="button"
-                      onClick={Preview}
-                      className="btn btn-primary mt-3"
+                      onClick={handleToggle1}
+                      className="btn btn-primary mt-3 copy"
                     >
                       {" "}
                       Preview
                     </button>
-                    <button type="submit" className="btn btn-primary mt-3">
+                    <button type="submit" className="btn btn-primary mt-3 copy">
                       Submit
                     </button>
                   </div>
-                  <div className="titleanddescription">
-                    <Field
-                      type="text"
-                      placeholder="Title"
-                      name={`title`}
-                    />
-                    <Field
-                      type="text"
-                      placeholder="Description"
-                      name={`Description`}
-                    />
-                  </div>
+                  <div className="titleanddescription">{tmp3(showPreview,errors,touched)}</div>
                   {values.questions.map((form, index) => (
-                    <div key={index} className="container2">
-                      <div className="btn2">
-                        <h3>Question {index + 1}</h3>
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm delete"
-                          onClick={() => array.remove(index)}
-                        >
-                          <AiOutlineDelete />
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-success btn-sm copy"
-                          onClick={() =>
-                            array.insert(index + 1, values.questions[index])
-                          }
-                        >
-                          <AiOutlineCopy />
-                        </button>
+                    <div key={index}>
+                      <div className="card">
+                        <div className="card-body">
+                          <div className="card-title ">
+                            {tmp1(index, showPreview, array, values)}
+                          </div>
+                          {tmp(form, index, showPreview,errors,touched)}
+                        </div>
                       </div>
-                      {tmp(form, index)}
                     </div>
                   ))}
 
-                  <div className="text-center btn1">
+                  <br />
+                  <div className="insert">
                     <button
                       type="button"
-                      className="btn btn-success btn-sm text"
-                      onClick={() =>
-                        array.push({
-                          question: "",
-                          description: "",
-                          QuestionType: "Text",
-                        })
-                      }
+                      className="btn btn-primary btn-sm"
+                      onClick={handleToggle}
                     >
-                      Text
+                      + Add new
                     </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-sm date"
-                      onClick={() =>
-                        array.push({
-                          question: "",
-                          description: "",
-                          QuestionType: "Date",
-                        })
-                      }
-                    >
-                      Date
-                    </button>
+                    {expand && (
+                      <div className="text-center ">
+                        <button
+                          type="button"
+                          className="btn btn-success btn-sm "
+                          onClick={() => {
+                            array.push({
+                              question: "",
+                              description: "",
+                              QuestionType: "Text",
+                            });
+                            sidebar();
+                          }}
+                        >
+                          Text
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm  "
+                          onClick={() => {
+                            array.push({
+                              question: "",
+                              description: "",
+                              QuestionType: "Date",
+                            });
+                            sidebar();
+                          }}
+                        >
+                          Date
+                        </button>
+                      </div>
+                    )}
                   </div>
-                  <div className="text-center"></div>
                 </div>
               )}
             />

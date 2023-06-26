@@ -6,15 +6,20 @@ import AllForms1 from "./AllForms1";
 
 const AllForms = () => {
   const { loading, error, data,refetch } = useQuery(GetForms)
-return (<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+  {/* <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}> */}
+return (
+
+<div >
        {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>Error: {error.message}</p>
         ) : (
+          
           <div className="container1">
             {data.forms.map((form: any) => (
-              <AllForms1 key={form.id} data={form}/>
+              
+              <AllForms1 key={form.id} data={form} />
             ))}
 
           </div>
