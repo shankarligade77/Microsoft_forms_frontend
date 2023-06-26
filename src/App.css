@@ -1,5 +1,4 @@
-
-body{
+body {
   margin-top: 0px;
 }
 .outer-container {
@@ -12,7 +11,6 @@ body{
   padding: 1px 20px;
   margin: 40px 300px;
   min-height: 700px;
- 
 }
 
 .inner-container {
@@ -55,7 +53,7 @@ input[type="text"]:hover {
   flex-direction: row;
 }
 
-.insert button{
+.insert button {
   margin-bottom: 25px;
 }
 
@@ -79,26 +77,19 @@ h3 {
 
 .card {
   border: none;
-  background-color: rgb(226,226,226);
+  background-color: rgb(226, 226, 226);
   margin-bottom: 20px;
 }
 
-/* .titleanddescription{
-  margin-bottom: 20px;
-} */
-
-.preview{
+.preview {
   margin-top: 200px;
 }
 
-.fieldoutline input{
+.fieldoutline input {
   border: none;
   margin-bottom: 0px;
 }
 
 .fieldoutline input[type="text"]:hover {
- 
   border: none;
-
 }
-

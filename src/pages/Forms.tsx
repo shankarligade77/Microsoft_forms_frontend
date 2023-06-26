@@ -6,7 +6,7 @@ import { GetForms } from "../Graphql/Queries";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import * as Yup from 'yup'
+import * as Yup from "yup";
 const tmp = (
   form: {
     QuestionType: string;
@@ -15,7 +15,8 @@ const tmp = (
   },
   index: number,
   showPreview: boolean,
-  errors:any,touched:any
+  errors: any,
+  touched: any
 ) => {
   if (!showPreview) {
     if (form.QuestionType === "Text") {
@@ -28,15 +29,17 @@ const tmp = (
             placeholder="Question"
           />
 
-           {errors.questions?.[index]?.question && touched.questions?.[index]?.question ? (
-            <div  style={{ color: "red" }}>{errors.questions[index].question}</div>
+          {errors.questions?.[index]?.question &&
+          touched.questions?.[index]?.question ? (
+            <div style={{ color: "red" }}>
+              {errors.questions[index].question}
+            </div>
           ) : null}
-        
+
           <Field
             type="text"
             className="form-control"
             name={`questions[${index}].description`}
-          
             placeholder="Description"
           />
         </div>
@@ -50,14 +53,16 @@ const tmp = (
             name={`questions[${index}].question`}
             placeholder="Question"
           />
-          {errors.questions?.[index]?.question && touched.questions?.[index]?.question ? (
-            <div  style={{ color: "red" }}>{errors.questions[index].question}</div>
+          {errors.questions?.[index]?.question &&
+          touched.questions?.[index]?.question ? (
+            <div style={{ color: "red" }}>
+              {errors.questions[index].question}
+            </div>
           ) : null}
-        
+
           <Field
             type="date"
             className="form-control"
-          
             name={`questions[${index}].date`}
           />
         </div>
@@ -90,14 +95,14 @@ const tmp = (
   }
 };
 
-const tmp3 = (showPreview: boolean,errors:any,touched:any) => {
+const tmp3 = (showPreview: boolean, errors: any, touched: any) => {
   if (!showPreview) {
     return (
       <>
         <Field type="text" placeholder="Title" name={`title`} />
         {errors.title && touched.title ? (
-             <div  style={{ color: "red" }}>{errors.title}</div>
-           ) : null}
+          <div style={{ color: "red" }}>{errors.title}</div>
+        ) : null}
         <Field type="text" placeholder="Description" name={`Description`} />
       </>
     );
@@ -141,29 +146,19 @@ const tmp1 = (index: number, showPreview: boolean, array: any, values: any) => {
     );
   }
 };
-// const initialValues = {
-//   question: "",
-//   description: "",
-// };
-const initialValues={
+
+const initialValues = {
   title: "",
   Description: "",
   questions: [],
-}
+};
 const Forms = () => {
-
- 
-
   const [createForm] = useMutation(Create_Form);
   const [addItems] = useMutation(ADD_ITEMS);
   const { data, loading } = useQuery(GetForms);
   const [expand, setExpand] = useState(false);
   const [showPreview, setshowPreview] = useState(false);
   const navigate = useNavigate();
-  // const [previewdata, setPreviewdata] = useState([]);
-  // const Preview = () => {
-  //   navigate("/preview");
-  // };
 
   const handleToggle = () => {
     setExpand(!expand);
@@ -177,17 +172,10 @@ const Forms = () => {
     setExpand(false);
   };
 
-
-
-  // const validationSchema=Yup.object({
-  //   title:Yup.string().required("Required!"),
-  //   question:Yup.string().required("Required")
- 
-  // })
   const itemSchema = Yup.object().shape({
     question: Yup.string().required("Question is required"),
   });
-  
+
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
     Description: Yup.string().required("Description is required"),
@@ -195,47 +183,36 @@ const Forms = () => {
   });
 
   return (
-    
     <div className="card">
       <Formik
-     
-       
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values) => {
           console.log(values);
-         
 
-          // if (!values.title) {
-          //   alert("Enter Title");
-            
-          // } 
-          // else { 
-            const title = values.title;
-            const Description = values.Description;
+          const title = values.title;
+          const Description = values.Description;
 
-            const xyz = await createForm({
-              variables: {
-                title: title,
-                description: Description,
-              },
-            });
+          const xyz = await createForm({
+            variables: {
+              title: title,
+              description: Description,
+            },
+          });
 
-            const token = xyz.data.createform.token;
-         
-            sessionStorage["token"] = token;
+          const token = xyz.data.createform.token;
 
-            const { data } = await addItems({
-              variables: {
-                input: values.questions,
-              },
-            });
-            alert("data addedd successfully");
-          // }
+          sessionStorage["token"] = token;
+
+          const { data } = await addItems({
+            variables: {
+              input: values.questions,
+            },
+          });
+          alert("data addedd successfully");
         }}
       >
-        {({ values ,errors,touched}) => (
-          
+        {({ values, errors, touched }) => (
           <Form>
             <FieldArray
               name="questions"
@@ -254,7 +231,9 @@ const Forms = () => {
                       Submit
                     </button>
                   </div>
-                  <div className="titleanddescription">{tmp3(showPreview,errors,touched)}</div>
+                  <div className="titleanddescription">
+                    {tmp3(showPreview, errors, touched)}
+                  </div>
                   {values.questions.map((form, index) => (
                     <div key={index}>
                       <div className="card">
@@ -262,7 +241,7 @@ const Forms = () => {
                           <div className="card-title ">
                             {tmp1(index, showPreview, array, values)}
                           </div>
-                          {tmp(form, index, showPreview,errors,touched)}
+                          {tmp(form, index, showPreview, errors, touched)}
                         </div>
                       </div>
                     </div>

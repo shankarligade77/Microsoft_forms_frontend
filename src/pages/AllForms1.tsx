@@ -20,7 +20,6 @@ const AllForms1 = (props: {
       })
       .catch((error) => {
         console.error("Failed to delete form:", error);
-        refetch();
       });
   };
 

@@ -1,10 +1,7 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import FirstPage from "./pages/FirstPage";
 import { Route, Routes } from "react-router-dom";
 
-import path from "path";
 import Forms from "./pages/Forms";
 import AllForms from "./pages/AllForms";
 import Preview from "./pages/Preview";
