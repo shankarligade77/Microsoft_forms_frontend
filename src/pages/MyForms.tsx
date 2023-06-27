@@ -1,9 +1,8 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { GetForms } from "../Graphql/Queries";
-import { DELETE_FORM } from "../Graphql/Mutation";
-import AllForms1 from "./AllForms1";
+import MyForms1 from "./MyForms1";
 
-const AllForms = () => {
+const MyForms = () => {
   const { loading, error, data, refetch } = useQuery(GetForms);
   return (
     <div>
@@ -12,14 +11,16 @@ const AllForms = () => {
       ) : error ? (
         <p>Error: {error.message}</p>
       ) : (
-        <div className="container1">
-          {data.forms.map((form: any) => (
-            <AllForms1 key={form.id} data={form} />
+        <div className="container">
+         <div className="row" style={{padding:"20px", margin:"20px"}}>
+         {data.forms.map((form: any) => (
+            <MyForms1 key={form.id} data={form} />
           ))}
+         </div>
         </div>
       )}
     </div>
   );
 };
 
-export default AllForms;
+export default MyForms;
