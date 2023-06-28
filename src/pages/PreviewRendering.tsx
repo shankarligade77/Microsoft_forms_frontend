@@ -1,6 +1,6 @@
 import { Field } from "formik";
 
-const Preview1 = (props: {
+const PreviewRendering = (props: {
   data: { id: Number; question: any; QuestionType: any };
   index: any;
 }) => {
@@ -41,5 +41,5 @@ const Preview1 = (props: {
   );
 };
 
-export default Preview1;
+export default PreviewRendering;
 

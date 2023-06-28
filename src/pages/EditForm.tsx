@@ -1,11 +1,10 @@
 import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
-import { AiOutlineDelete, AiOutlineCopy, AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineCopy } from "react-icons/ai";
 import { ADD_ITEMS, Create_Form } from "../Graphql/Mutation";
 import { useMutation, useQuery } from "@apollo/client";
-import { GetForms } from "../Graphql/Queries";
+import { EditFormData, GetForms } from "../Graphql/Queries";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import * as Yup from "yup";
 const tmp = (
   form: {
@@ -152,12 +151,13 @@ const initialValues = {
   Description: "",
   questions: [],
 };
-const Forms = () => {
+const EditForm = () => {
   const [createForm] = useMutation(Create_Form);
   const [addItems] = useMutation(ADD_ITEMS);
   const [expand, setExpand] = useState(false);
   const [showPreview, setshowPreview] = useState(false);
-
+  const { data, refetch } = useQuery(EditFormData);   
+    
 
   const handleToggle = () => {
     setExpand(!expand);
@@ -180,6 +180,14 @@ const Forms = () => {
     Description: Yup.string().required("Description is required"),
     questions: Yup.array().of(itemSchema),
   });
+
+
+console.log(data);
+
+
+
+
+
 
   return (
     <div className="card">
@@ -223,9 +231,8 @@ const Forms = () => {
                       onClick={handleToggle1}
                       className="btn btn-primary mt-3 copy"
                     >
-                     {/* <AiFillEye/>
-                     <AiFillEyeInvisible/> */}
-                      &nbsp;Preview
+                      {" "}
+                      Preview
                     </button>
                     <button type="submit" className="btn btn-primary mt-3 copy">
                       Submit
@@ -299,4 +306,4 @@ const Forms = () => {
   );
 };
 
-export default Forms;
+export default EditForm;

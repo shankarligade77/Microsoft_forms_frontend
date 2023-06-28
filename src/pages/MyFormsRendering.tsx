@@ -1,9 +1,10 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineDelete, AiOutlineCopy } from "react-icons/ai";
 import { DELETE_FORM } from "../Graphql/Mutation";
 import { GetForms } from "../Graphql/Queries";
 import bgimag from '../Images/background.png'
-const MyForms1 = (props: {
+const MyFormsRendering = (props: {
   data: { id: Number; title: any; description: any };
 }) => {
   const { id, title, description } = props.data;
@@ -30,15 +31,15 @@ const MyForms1 = (props: {
   <div className="card-body">
     <h5 className="card-title">{title}</h5>
     <p className="card-text"></p>
-          <button color="secondary" onClick={removeForm} style={{float:"right"}}>
-            Delete
+          <button color="secondary" onClick={removeForm} style={{float:"right"}}  className="btn btn-danger btn-sm ">
+          <AiOutlineDelete />
           </button>
   </div>
 </div>
   );
 };
 
-export default MyForms1;
+export default MyFormsRendering;
 
 
 

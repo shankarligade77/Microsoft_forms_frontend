@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { GetForms } from "../Graphql/Queries";
-import MyForms1 from "./MyForms1";
+import MyFormsRendering from "./MyFormsRendering";
 
 const MyForms = () => {
   const { loading, error, data, refetch } = useQuery(GetForms);
@@ -12,9 +12,9 @@ const MyForms = () => {
         <p>Error: {error.message}</p>
       ) : (
         <div className="container">
-         <div className="row" style={{padding:"20px", margin:"20px"}}>
+         <div className="row">
          {data.forms.map((form: any) => (
-            <MyForms1 key={form.id} data={form} />
+            <MyFormsRendering key={form.id} data={form} />
           ))}
          </div>
         </div>

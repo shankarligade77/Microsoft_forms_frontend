@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import EditForm from './../pages/EditForm';
 
 export const GetForms = gql`
   query forms {
@@ -20,3 +21,16 @@ export const GetItems = gql`
     }
   }
 `;
+
+
+
+export const EditFormData=gql`
+query editForm($id: Float!){
+  editForm(id: $id){
+    id
+    question
+    description
+  }
+}
+
+`

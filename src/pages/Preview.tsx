@@ -1,18 +1,17 @@
 import { useQuery } from "@apollo/client";
 import { GetForms, GetItems } from "../Graphql/Queries";
 import { useEffect } from "react";
-import Preview1 from "./Preview1";
+import PreviewRendering from "./PreviewRendering";
+
 
 const Preview = () => {
   const { data, refetch } = useQuery(GetItems);
   const formsData = useQuery(GetForms);
-  const OnSubmit = () => {};
+  // const OnSubmit = () => {};
   return (
     <div className="outer-container">
       <div className="inner-container">
         <div></div>
-        {/* {console.log(formsData.data)}
-        {console.log(formsData.data?.forms[0]?.title)} */}
         <h3 style={{ color: "black", marginBottom: "10px" }}>
           {formsData.data?.forms[0]?.title}
         </h3>
@@ -28,7 +27,7 @@ const Preview = () => {
           {
             refetch();
           }
-          return <Preview1 key={item.id} data={item} index={index} />;
+          return <PreviewRendering key={item.id} data={item} index={index} />;
         })}
         <button className="btn btn-primary">Submit</button>
       </div>
