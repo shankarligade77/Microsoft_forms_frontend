@@ -25,11 +25,11 @@ const EditForm = () => {
   const [titleset, setTitle] = useState(title);
   const [descriptionset, setDescription] = useState(description);
   const [showPreview, setshowPreview] = useState(false);
-  const { data, refetch } = useQuery(EditFormData, {
+  const { data, loading, error, refetch } = useQuery(EditFormData, {
     variables: { id: formId },
   });
 
-  const tmp = (
+  const questionsFieldRender = (
     form: {
       QuestionType: string;
       question: string;
@@ -117,7 +117,7 @@ const EditForm = () => {
     }
   };
 
-  const tmp3 = (showPreview: boolean, errors: any, touched: any) => {
+  const titleField = (showPreview: boolean, errors: any, touched: any) => {
     if (!showPreview) {
       return (
         <>
@@ -163,13 +163,13 @@ const EditForm = () => {
     }
   };
 
-  const tmp1 = (
+  const addingTDComponent = (
     index: number,
     showPreview: boolean,
     array: any,
     values: any
   ) => {
-    // console.log("tem1 madhe alo");
+  
     if (!showPreview) {
       return (
         <div>
@@ -218,31 +218,37 @@ const EditForm = () => {
   };
 
   const defaultData = (array: any) => {
-  
-    setShowonce(false)
-console.log("Hello1")
-      return (
-        <div>
-          {data?.editForm.map((item: any) => {
-            if (item.QuestionType == "Text") {
-              array.push({
-                question: item.question,
-                description: item.description,
-                QuestionType: "Text",
-              });
-            } else {
-              array.push({
-                question: item.question,
-                description: item.description,
-                QuestionType: "Date",
-              });
-            }
-          })}
-        
-        </div>
-      );
-      
-    
+    setShowonce(false);
+    console.log("Hello1");
+    refetch();
+    return (
+      <div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error.message}</p>
+        ) : (
+          <div>
+            {data.editForm.map((item: any) => {
+              if (item.QuestionType == "Text") {
+                array.push({
+                  question: item.question,
+                  description: item.description,
+                  QuestionType: "Text",
+                });
+              } else {
+                array.push({
+                  question: item.question,
+                  description: item.description,
+                  QuestionType: "Date",
+                });
+              }
+            })}
+          </div>
+          
+        )}
+      </div>
+    );
   };
 
   return (
@@ -289,19 +295,19 @@ console.log("Hello1")
                       Submit
                     </button>
                   </div>
-              {showonce&&<div>{defaultData(array)}</div>}
-                  
+                  {showonce && <div>{defaultData(array)}</div>}
+
                   <div className="titleanddescription">
-                    {tmp3(showPreview, errors, touched)}
+                    {titleField(showPreview, errors, touched)}
                   </div>
                   {values.questions.map((form, index) => (
                     <div key={index}>
                       <div className="card">
                         <div className="card-body">
                           <div className="card-title ">
-                            {tmp1(index, showPreview, array, values)}
+                            {addingTDComponent(index, showPreview, array, values)}
                           </div>
-                          {tmp(form, index, showPreview, errors, touched)}
+                          {questionsFieldRender(form, index, showPreview, errors, touched)}
                         </div>
                       </div>
                     </div>
