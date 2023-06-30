@@ -30,6 +30,7 @@ query editForm($id: Float!){
     id
     question
     description
+    QuestionType
   }
 }
 
