@@ -4,6 +4,7 @@ import { AiOutlineDelete, AiOutlineCopy, AiOutlineEdit } from "react-icons/ai";
 import { DELETE_FORM } from "../Graphql/Mutation";
 import { GetForms } from "../Graphql/Queries";
 import bgimag from '../Images/background.png'
+import { useEffect } from "react";
 
 const MyFormsRendering = (props: {
   data: { id: Number; title: any; description: any };

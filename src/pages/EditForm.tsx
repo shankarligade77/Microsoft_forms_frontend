@@ -5,8 +5,8 @@ import { useMutation, useQuery } from "@apollo/client";
 import { EditFormData, GetForms } from "../Graphql/Queries";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import * as Yup from "yup";
-import { title } from "process";
+// import * as Yup from "yup";
+// import { title } from "process";
 
 const initialValues = {
   title: "",
@@ -40,6 +40,7 @@ const EditForm = () => {
     errors: any,
     touched: any
   ) => {
+    console.log("questionsFieldRender");
     if (!showPreview) {
       if (form.QuestionType === "Text") {
         return (
@@ -163,13 +164,13 @@ const EditForm = () => {
     }
   };
 
-  const addingTDComponent = (
+  const showingcopydelete = (
     index: number,
     showPreview: boolean,
     array: any,
     values: any
   ) => {
-  
+    console.log("showingcopydelete");
     if (!showPreview) {
       return (
         <div>
@@ -217,10 +218,9 @@ const EditForm = () => {
     setExpand(false);
   };
 
-  const defaultData = (array: any) => {
+  const defaultData = (array: any, showPreview: any, values: any) => {
     setShowonce(false);
     console.log("Hello1");
-    refetch();
     return (
       <div>
         {loading ? (
@@ -229,7 +229,7 @@ const EditForm = () => {
           <p>Error: {error.message}</p>
         ) : (
           <div>
-            {data.editForm.map((item: any) => {
+            {data.editForm.map((item: any, index: any) => {
               if (item.QuestionType == "Text") {
                 array.push({
                   question: item.question,
@@ -245,18 +245,18 @@ const EditForm = () => {
               }
             })}
           </div>
-          
         )}
       </div>
     );
   };
+
 
   return (
     <div className="card">
       <Formik
         initialValues={initialValues}
         onSubmit={async (values) => {
-          console.log(titleset, descriptionset, "title descr data");
+          console.log(values);
           const xyz = await createForm({
             variables: {
               title: titleset,
@@ -295,7 +295,10 @@ const EditForm = () => {
                       Submit
                     </button>
                   </div>
-                  {showonce && <div>{defaultData(array)}</div>}
+                  {showonce && (
+                    <div>{defaultData(array, showPreview, values)}</div>
+                  )}
+                  
 
                   <div className="titleanddescription">
                     {titleField(showPreview, errors, touched)}
@@ -305,9 +308,20 @@ const EditForm = () => {
                       <div className="card">
                         <div className="card-body">
                           <div className="card-title ">
-                            {addingTDComponent(index, showPreview, array, values)}
+                            {showingcopydelete(
+                              index,
+                              showPreview,
+                              array,
+                              values
+                            )}
                           </div>
-                          {questionsFieldRender(form, index, showPreview, errors, touched)}
+                          {questionsFieldRender(
+                            form,
+                            index,
+                            showPreview,
+                            errors,
+                            touched
+                          )}
                         </div>
                       </div>
                     </div>
@@ -362,7 +376,9 @@ const EditForm = () => {
         )}
       </Formik>
     </div>
+    
   );
+  
 };
 
 export default EditForm;
