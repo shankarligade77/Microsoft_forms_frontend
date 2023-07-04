@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 // import * as Yup from "yup";
 // import { title } from "process";
 
-const initialValues = {
+const initialValues: any = {
   title: "",
   Description: "",
   questions: [],
@@ -218,10 +218,8 @@ const EditForm = () => {
     setExpand(false);
   };
 
-  const defaultData = (array: any, showPreview: any, values: any) => {
-    setShowonce(false);
-    console.log("Hello1");
-    return (
+  return (
+    <div className="card">
       <div>
         {loading ? (
           <p>Loading...</p>
@@ -231,13 +229,13 @@ const EditForm = () => {
           <div>
             {data.editForm.map((item: any, index: any) => {
               if (item.QuestionType == "Text") {
-                array.push({
+                initialValues.questions.push({
                   question: item.question,
                   description: item.description,
                   QuestionType: "Text",
                 });
               } else {
-                array.push({
+                initialValues.questions.push({
                   question: item.question,
                   description: item.description,
                   QuestionType: "Date",
@@ -247,12 +245,6 @@ const EditForm = () => {
           </div>
         )}
       </div>
-    );
-  };
-
-
-  return (
-    <div className="card">
       <Formik
         initialValues={initialValues}
         onSubmit={async (values) => {
@@ -295,15 +287,11 @@ const EditForm = () => {
                       Submit
                     </button>
                   </div>
-                  {showonce && (
-                    <div>{defaultData(array, showPreview, values)}</div>
-                  )}
-                  
 
                   <div className="titleanddescription">
                     {titleField(showPreview, errors, touched)}
                   </div>
-                  {values.questions.map((form, index) => (
+                  {values.questions.map((form: any, index: number) => (
                     <div key={index}>
                       <div className="card">
                         <div className="card-body">
@@ -347,6 +335,7 @@ const EditForm = () => {
                               description: "",
                               QuestionType: "Text",
                             });
+
                             sidebar();
                           }}
                         >
@@ -376,9 +365,7 @@ const EditForm = () => {
         )}
       </Formik>
     </div>
-    
   );
-  
 };
 
 export default EditForm;

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import * as Yup from "yup";
-const tmp = (
+const questionsFieldRender = (
   form: {
     QuestionType: string;
     question: string;
@@ -95,7 +95,7 @@ const tmp = (
   }
 };
 
-const tmp3 = (showPreview: boolean, errors: any, touched: any) => {
+const titleField = (showPreview: boolean, errors: any, touched: any) => {
   if (!showPreview) {
     return (
       <>
@@ -104,6 +104,9 @@ const tmp3 = (showPreview: boolean, errors: any, touched: any) => {
           <div style={{ color: "red" }}>{errors.title}</div>
         ) : null}
         <Field type="text" placeholder="Description" name={`Description`} />
+        {errors.Description && touched.Description ? (
+          <div style={{ color: "red" }}>{errors.Description}</div>
+        ) : null}
       </>
     );
   } else {
@@ -117,7 +120,7 @@ const tmp3 = (showPreview: boolean, errors: any, touched: any) => {
   }
 };
 
-const tmp1 = (index: number, showPreview: boolean, array: any, values: any) => {
+const showingcopydelete = (index: number, showPreview: boolean, array: any, values: any) => {
   if (!showPreview) {
     return (
       <div>
@@ -147,7 +150,7 @@ const tmp1 = (index: number, showPreview: boolean, array: any, values: any) => {
   }
 };
 
-const initialValues = {
+const initialValues:any = {
   title: "",
   Description: "",
   questions: [],
@@ -182,13 +185,14 @@ const Forms = () => {
   });
 
   return (
+    
     <div className="card">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values) => {
           console.log(values);
-
+          console.log("Hello")
           const title = values.title;
           const Description = values.Description;
 
@@ -223,8 +227,7 @@ const Forms = () => {
                       onClick={handleToggle1}
                       className="btn btn-primary mt-3 copy"
                     >
-                     {/* <AiFillEye/>
-                     <AiFillEyeInvisible/> */}
+                    
                       &nbsp;Preview
                     </button>
                     <button type="submit" className="btn btn-primary mt-3 copy">
@@ -232,16 +235,16 @@ const Forms = () => {
                     </button>
                   </div>
                   <div className="titleanddescription">
-                    {tmp3(showPreview, errors, touched)}
+                    {titleField(showPreview, errors, touched)}
                   </div>
-                  {values.questions.map((form, index) => (
+                  {values.questions.map((form:any, index:number) => (
                     <div key={index}>
                       <div className="card">
                         <div className="card-body">
                           <div className="card-title ">
-                            {tmp1(index, showPreview, array, values)}
+                            {showingcopydelete(index, showPreview, array, values)}
                           </div>
-                          {tmp(form, index, showPreview, errors, touched)}
+                          {questionsFieldRender(form, index, showPreview, errors, touched)}
                         </div>
                       </div>
                     </div>
