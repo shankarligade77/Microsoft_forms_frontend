@@ -1,6 +1,6 @@
 import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
 import { AiOutlineDelete, AiOutlineCopy } from "react-icons/ai";
-import { ADD_ITEMS, Create_Form } from "../Graphql/Mutation";
+import { ADD_ITEMS, Create_Form, UPDATE_ITEMS } from "../Graphql/Mutation";
 import { useMutation, useQuery } from "@apollo/client";
 import { EditFormData, GetForms } from "../Graphql/Queries";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ const EditForm = () => {
   formId = parseFloat(formId);
 
   const [createForm] = useMutation(Create_Form);
-  const [addItems] = useMutation(ADD_ITEMS);
+  const [updateItems] = useMutation(UPDATE_ITEMS);
   const [expand, setExpand] = useState(false);
   const [showonce, setShowonce] = useState(true);
   const [titleset, setTitle] = useState(title);
@@ -218,6 +218,8 @@ const EditForm = () => {
     setExpand(false);
   };
 
+ 
+
   return (
     <div className="card">
       <div>
@@ -260,8 +262,9 @@ const EditForm = () => {
 
           sessionStorage["token"] = token;
 
-          const { data } = await addItems({
+          const { data } = await updateItems({
             variables: {
+              id:formId,
               input: values.questions,
             },
           });

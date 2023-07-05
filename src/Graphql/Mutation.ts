@@ -44,3 +44,12 @@ export const ADD_ITEMS = gql`
     }
   }
 `;
+
+
+export const UPDATE_ITEMS = gql`
+  mutation updateItems($id: Float!,$input: [ItemsInputType!]!) {
+    updateItems(id: $id,input: $input) {
+      result
+    }
+  }
+`;
